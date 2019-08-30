@@ -52,18 +52,21 @@ Flur::Flur(int a) {
     if (k == 0) { // if even, bc even in the line should be an char
       SendToMarkov(Decode(block[i]), 1);
     } else { // if odd, bc odd will be integers
-      SendToMarkov(Decode(block[i]);
+    SendToMarkov(Decode(block[i]);
       }
-    }
+}
   }
 
-int Flur::Decode(std::string a) {
+int Flur::Decode(std::string a) { // Input a string to get an Int in return
   return std::stoi(a);
 }
-char * Flur::Decode(std::string a, int b) {
+// Input a string to get back a char *; runs other Decode Fn
+// the int b will be changed to a 1 if it is an array; 0 if it is a single char
+char * Flur::Decode(std::string a, int * b) {
   return Decode( std::stoi(a) );
 }
- char Decode(int a) { // input as ASCII to return a character; even nessessary?
+// Input an int; namely a ASCII integer; return the corresponding character to
+char Decode(int a) { // input as ASCII to return a character; even nessessary?
    char c = '0' + a;
    return c;
  }
