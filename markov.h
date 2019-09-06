@@ -24,27 +24,31 @@ int mass_rand(int size);
 // When called, return a random int between 1 and 100
 int pert_rand();
 
+
+// Markov chain explicitly for the use of letters
+class Markov_chain {
+  
+  private:
+
 // Base struct to hold letter
 struct Indiv_char {
   // current char
   char designated_char;
-  
-  // map pair of char to odds, for next following char
+  // map pair of char to num of occurances, for next following char
   std::map<char, unsigned int> suffix;
-  
+  // map pair of char to odds of appearce out of 100
+  std::map<char, int> appearance_rate;
+  // a list of chars corresponding to the number rolled; ie if 42 is rolled then pull 42nd char
+  std::vector<char> odds; 
   // total number of comaprisons made- confidence
-  unsigned int total_comparisons;
-  
+  unsigned int total_comparisons;  
   // Size of the map
   unsigned int links;
 };
 
-class Markov_chain {
-  
-  private:
     // Series is a 101 length array, made in construct
     std::map<char, Indiv_char> prefix;
-    // List chars, same order as letter_series
+    // List chars, same order as prefixes
     std::vector<char> set_vector;
   
     // FN: determine odds of char; used in fn: read_set()
@@ -58,7 +62,7 @@ class Markov_chain {
 //  percent chance * 100; if a certain char has a 26% chance of being 
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
-std::vector<char> * Make_odd_series(char in);
+void Make_odd_series(char in);
 
   public:
     // FN:
@@ -67,13 +71,17 @@ std::vector<char> * Make_odd_series(char in);
     // FN: make a single word; end with a whitespace
     std::string word_building(char start_letter);
     // FN: provide a char, return the most likely char 
-    char return_char(Indiv_char querry_letter);   
-
+    char return_char(char querry_letter);   
+    // FN: same as "return_char" but is random
 /***************************/
     // FN: read a document, update odds accordingly
 //WIP    void read_up_set;
+// see Flur file
     // FN: populate data with saved data
-//WIP    void read_saved_set;
+//WIP    void read_saved_set; 
+// see Flur file
+    // FN: recieve message from anther function
+//WIP   void revieve_mssg;
 /**************************/
     // FN: write data to given file
 //WIP    void write_saved_set;

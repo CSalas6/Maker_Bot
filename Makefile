@@ -6,7 +6,7 @@ markov.o: markov.h markov.cpp
 Flur.o: Flur.h Flur.cpp
 	g++ $(CXXFLAGS) -c Flur.cpp -o Flur.o
 
-upGit:
+upGit: Makefile Flur.h markov.h Flur.cpp markov.cpp
 	git add $^
 	git commit -m "Update"
 	git push

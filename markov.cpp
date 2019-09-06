@@ -14,12 +14,12 @@ int pert_rand() {
  */
 Markov_chain::Markov_chain() {}
 
-// Provided the letter in the map, and the prefix's suffix, return the unsigned int "odds"
+// Provided the letter in the map and the prefix's suffix, return the unsigned int "odds"
 // contained in the map suffix
 unsigned int Markov_chain::get_odds(char map_letter, char querry_char) {
   // if the desired obj exists(prefix's suffix), then return the int contained 
   if ( (prefix[map_letter]).suffix[querry_char] ) {
-    return ( (prefix[map_letter]).suffix[querry_char] );
+    return ( ( (prefix[map_letter]).suffix[querry_char]).appearance_rate[querry_char]);
     // otherwise return zero, for "no" odds/ impossible
   } else {
     return 0;
@@ -70,11 +70,13 @@ void Markov_chain::set_odds(char map_letter, char querry_char, unsigned int upda
 //  percent chance * 100; if a certain char has a 26% chance of being
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
-std::vector<char> * Markov_chain::Make_odd_series(char in) {
+void Markov_chain::Make_odd_series(char in) {
   // create/ assign objs as needed
   Indiv_char temp = prefix[in];
   std::vector<char> return_obj;
-
+  // Clear the appearance rate map to be reset
+  temp.appearance_rate.clear();
+  temp.odds.clear();
   // make a map.iterator then go through the suffix map one by one
   for (std::map<char, unsigned int>::iterator it = temp.suffix.begin(); 
       it != temp.suffix.end(); it++) {
@@ -82,18 +84,17 @@ std::vector<char> * Markov_chain::Make_odd_series(char in) {
     //  count by the total # occurances; then multiply by 100
     float K = it->second / temp.total_comparisons;
     int J = K * 100;
-    // fill vector with a # of copies matching the chance of occurance, "J"
+   // assign appropriate set to appearance_rate
+   temp.appearance_rate.insert(std::pair<char, int>(it->first, J));
+   // populate the temp.odds vector with a temp vector
     while(J > 0) {
       return_obj.push_back( it->first );
       J--;
     }
   }
-
-  std::vector<char> * return_obj_p = &return_obj;
-  // return the vector
-  return return_obj_p;
+  // set the temp vector to the temp.odds one
+  temp.odds = return_obj;
 }
-
 
 
 /**/
@@ -114,21 +115,53 @@ std::string return_obj = "";
 
     // If the runner is not a whitespace, then find the next one and recurrse
   } else {
-
-    // create vector of possible suffixes according to occurance chance as "V"
-    std::vector<char> V = *(Make_odd_series(runner) );
     // return a random number between 0 and size of the vector "V" as "T"
     int T = mass_rand(V.size() );
+    // using the random number, pull it's "odds" vector to pull from
+    char R = temp.odds[T]
     // Build the string "return_obj" wih the randomly chosen letter and call
     //    the function recurssively to get the next letter;
-    return_obj = V[T] + build_word(V[T]);
-    // return the final product;
+    return_obj = R + build_word(temp.odds[T]);
+    // recurse
   }
-
   return return_obj;
 }
-
-
+/**/
+// Provide a char and return the most likely char
+char return_char(char querry_letter) {
+// if the char exists in Markov's stored data
+if (prefix.find(querry_letter) != prefix.end) {
+  // temp variables
+  Indiv_char temp = prefix[querry_letter];
+  int more = 0, less = 0;
+  char small = temp.odds[0]; // check moment by moment
+  char big = small; // last char
+  char check = small; // char with greatest liekely hood
+  // for length of odds, count number of same char
+  for (int i = 1; i < temp.odds.size(); i++) {
+    small = temp.odds[i];
+    if (small == big) { 
+    // current is same as last char; increment current counter
+      less++; 
+      } else { 
+      // current != last char; reset counter
+      big = small;
+      less = 1;
+      }
+    if (less > more) { 
+    // if current counter > current highest; switch highest to = counter
+    // and do the same to check to match
+      more = less;
+      check = small;
+  }
+}
+return check;
+}else {
+// error; desired char not in saved data
+// unreliable error response, but it is one
+return '0';
+}
+}
 
 
 
