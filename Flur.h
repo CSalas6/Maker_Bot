@@ -32,7 +32,7 @@ class Flur {
 
  char Decode(std::string); char Decode(int); // input as ASCII to return a character; even nessessary?
 
- void SendToMarkov(char); void SendToMarkov(int); // send a variable to Markov
+ void SendToMarkov(int i_out, char c_out, int flag); // send a variable to Markov
 
  void MessageMarkov(int); void MessageMarkov(int, char); // systematically send messages
                      //to Markov; ie: inform Markov the start of a new line or new char

@@ -24,12 +24,6 @@ int mass_rand(int size);
 // When called, return a random int between 1 and 100
 int pert_rand();
 
-
-// Markov chain explicitly for the use of letters
-class Markov_chain {
-  
-  private:
-
 // Base struct to hold letter
 struct Indiv_char {
   // current char
@@ -39,18 +33,23 @@ struct Indiv_char {
   // map pair of char to odds of appearce out of 100
   std::map<char, int> appearance_rate;
   // a list of chars corresponding to the number rolled; ie if 42 is rolled then pull 42nd char
-  std::vector<char> odds; 
+  std::vector<char> odds;
   // total number of comaprisons made- confidence
-  unsigned int total_comparisons;  
+  unsigned int total_comparisons;
   // Size of the map
   unsigned int links;
 };
+
+// Markov chain explicitly for the use of letters
+class Markov_chain {
+
+  private:
 
     // Series is a 101 length array, made in construct
     std::map<char, Indiv_char> prefix;
     // List chars, same order as prefixes
     std::vector<char> set_vector;
-  
+
     // FN: determine odds of char; used in fn: read_set()
     unsigned int get_odds(char map_letter, char querry_char);
     void set_odds(char map_letter, char querry_char, unsigned int update);
@@ -58,8 +57,8 @@ struct Indiv_char {
     // FN: recurrsive support to "word_building" FN in public
     std::string build_word(char runner);
 
-// Given a letter, make a vector of suffixes corresponding to the 
-//  percent chance * 100; if a certain char has a 26% chance of being 
+// Given a letter, make a vector of suffixes corresponding to the
+//  percent chance * 100; if a certain char has a 26% chance of being
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
 void Make_odd_series(char in);
@@ -70,24 +69,18 @@ void Make_odd_series(char in);
 
     // FN: make a single word; end with a whitespace
     std::string word_building(char start_letter);
-    // FN: provide a char, return the most likely char 
-    char return_char(char querry_letter);   
+    // FN: provide a char, return the most likely char
+    char return_char(char querry_letter);
     // FN: same as "return_char" but is random
 /***************************/
-    // FN: read a document, update odds accordingly
-//WIP    void read_up_set;
 // see Flur file
     // FN: populate data with saved data
-//WIP    void read_saved_set; 
+//WIP    void read_saved_set;
 // see Flur file
     // FN: recieve message from anther function
-//WIP   void revieve_mssg;
-/**************************/
-    // FN: write data to given file
-//WIP    void write_saved_set;
+void recieve_mssg(int i_in, char c_in, int flags);
+// FN: recieve request for map of data
+std::map<char, unsigned int> write_request(char c_in)
+
 
 };
-
-
-
-

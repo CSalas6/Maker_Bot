@@ -17,7 +17,7 @@ Markov_chain::Markov_chain() {}
 // Provided the letter in the map and the prefix's suffix, return the unsigned int "odds"
 // contained in the map suffix
 unsigned int Markov_chain::get_odds(char map_letter, char querry_char) {
-  // if the desired obj exists(prefix's suffix), then return the int contained 
+  // if the desired obj exists(prefix's suffix), then return the int contained
   if ( (prefix[map_letter]).suffix[querry_char] ) {
     return ( ( (prefix[map_letter]).suffix[querry_char]).appearance_rate[querry_char]);
     // otherwise return zero, for "no" odds/ impossible
@@ -78,9 +78,9 @@ void Markov_chain::Make_odd_series(char in) {
   temp.appearance_rate.clear();
   temp.odds.clear();
   // make a map.iterator then go through the suffix map one by one
-  for (std::map<char, unsigned int>::iterator it = temp.suffix.begin(); 
+  for (std::map<char, unsigned int>::iterator it = temp.suffix.begin();
       it != temp.suffix.end(); it++) {
-    // determine perecnt chance of occurance by dividing suffix's numerical occurance 
+    // determine perecnt chance of occurance by dividing suffix's numerical occurance
     //  count by the total # occurances; then multiply by 100
     float K = it->second / temp.total_comparisons;
     int J = K * 100;
@@ -140,15 +140,15 @@ if (prefix.find(querry_letter) != prefix.end) {
   // for length of odds, count number of same char
   for (int i = 1; i < temp.odds.size(); i++) {
     small = temp.odds[i];
-    if (small == big) { 
+    if (small == big) {
     // current is same as last char; increment current counter
-      less++; 
-      } else { 
+      less++;
+      } else {
       // current != last char; reset counter
       big = small;
       less = 1;
       }
-    if (less > more) { 
+    if (less > more) {
     // if current counter > current highest; switch highest to = counter
     // and do the same to check to match
       more = less;
@@ -162,9 +162,29 @@ return check;
 return '0';
 }
 }
+// public FN, to take in inputs to add to data collection
+void markov::recieve_mssg(int i_in, char c_in, char check, int flags) {
+  switch (flags) {
+    case 0: // new input, put into class accordingly
+        Indiv_char temp = prefix[check];
+        (temp.suffix).insert(std::pair<char, int>(c_in, i_in));
+        break;
+    case 1: // Update required, check.suffix[c_in] != i_in
+        set_odds(check, c_in, i_in);
+        Make_odd_series(check)
+        break;
+    case 2: // temp
+        break;
+    default:
+        break;
+  }
+}
 
-
-
+// public FN, recieves a char that is used to pull the corresponding suffic
+// list from
+std::map<char, unsigned int> write_request(char c_in) {
+  return prefix[c_in].suffix;
+}
 
 
 
@@ -230,7 +250,3 @@ prefix.push_back(w);
 }
 
  */
-
-
-
-
