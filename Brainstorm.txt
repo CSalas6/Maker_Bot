@@ -1,0 +1,21 @@
+-Flur and Lee are the parents of Markov and Warkov.
+-Flur reads code files char by char and sends them to Markov.
+-Lee reads the same code file as Flur, reads it word by word(separated by
+whitespace), and then sends it to Warkov. 
+-Markov is a data routine that uses the markov chain idea to procedurally
+generate a new word, letter by letter, based on its database.
+-Warkov is another data routine that uses the markov chain idea to
+procedurally generate a new sentence, word by word, based on its database.
+Warkov will use Markov to create new words as needed, like variables.
+-Sakura and Joesph are the parents of Jane.
+-Sakura will read the instruction files, namely txt, then sends it to Joesph.
+-Joesph processes the data from Sakura to boil down the basics.
+-Jane is married to Warkov, and has their child Oscar and pet cat Anna.
+-Jane gets data from Joesph, who then with Warkov, creates the new code files
+based on the simple instructions stated.
+-Oscar is the "Main" file that will work as the interface to the user and will
+confirm when the task is down. (Planned) Oscar will compile the code to ensure
+it works, on failed compilation it will regenerate the broken file(s) (or maybe,
+if good enough it will then read through the file to do any minor fixes).
+-Anna is tasked with actual writing of the files and also saving the databases
+of both Markov and Warkov.
