@@ -1,6 +1,8 @@
-// Flur will be tasked with explicitly reading from the save file and sending it off to Markov's save file
+// Flur will be tasked with explicitly reading from the save file and
+// sending it off to Markov's save file
 #include<string>
-// include files, idk what will be here yet, but there will be a lot of them
+// include files, idk what will be here yet, but there will be
+// a lot of them
 
 /*****************************************/
 class Flur {

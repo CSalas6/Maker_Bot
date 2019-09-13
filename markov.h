@@ -79,6 +79,7 @@ void Make_odd_series(char in);
 // see Flur file
     // FN: recieve message from anther function
 void recieve_mssg(int i_in, char c_in, int flags);
+void recieve_mssg(std::map<char, Indiv_char> in, int flags);
 // FN: recieve request for map of data
 std::map<char, unsigned int> write_request(char c_in)
 
