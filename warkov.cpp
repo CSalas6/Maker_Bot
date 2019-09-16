@@ -1,4 +1,4 @@
-#include"markov.h"
+#include"warkov.h"
 
 /**/
 // provided some int, generate a random num between Zero and "size"
@@ -12,14 +12,14 @@ int pert_rand() {
 /*
  *************************
  */
-Markov_chain::Markov_chain() {}
+Warkov_chain::Warkov_chain() {}
 
 // Provided the letter in the map and the prefix's suffix, return the unsigned int "odds"
 // contained in the map suffix
-unsigned int Markov_chain::get_odds(char map_letter, char querry_char) {
+unsigned int Warkov_chain::get_odds(std::string map_str, std::string querry_str) {
   // if the desired obj exists(prefix's suffix), then return the int contained
-  if ( (prefix[map_letter]).suffix[querry_char] ) {
-    return ( ( (prefix[map_letter]).suffix[querry_char]).appearance_rate[querry_char]);
+  if ( (prefix[map_str]).suffix[querry_str] ) {
+    return ( ( (prefix[map_str]).suffix[querry_str]).appearance_rate[querry_str]);
     // otherwise return zero, for "no" odds/ impossible
   } else {
     return 0;
@@ -28,39 +28,42 @@ unsigned int Markov_chain::get_odds(char map_letter, char querry_char) {
 
 /**/
 
-void Markov_chain::set_odds(char map_letter, char querry_char, unsigned int update) {
+void Warkov_chain::set_odds(char map_str, char querry_str, unsigned int update) {
   // If the map prefix exists
-  if(prefix.find(map_letter) != prefix.end() ) {
-    Indiv_char temp = prefix[map_letter];
+  if(prefix.find(map_str) != prefix.end() ) {
+    Indiv_str temp = prefix[map_str];
 
     // check to see if corresponding suffix exists; if so then change it to "update"
-    if ( temp.suffix[querry_char] ) {
-      int K = temp.suffix[querry_char];
+    if ( temp.suffix[querry_str] ) {
+      int K = temp.suffix[querry_str];
       int J = temp.total_comparisons - K;
       temp.total_comparisons = J + update;
 
       // if the corresponding suffix does not exist; create and set it
     } else {
-      (temp.suffix).insert(std::pair<char, unsigned int>(querry_char, update) );
+      (temp.suffix).insert(std::pair<std::string, unsigned int>(querry_str, update) );
       temp.total_comparisons = temp.total_comparisons + update;
       temp.links = temp.links + 1;
     }
-    // update the changed Indiv_char struct into the "prefix" map
-    prefix[map_letter] = temp;
+    // update the changed Indiv_str struct into the "prefix" map
+    prefix[map_str] = temp;
 
     // if the map prefix does not exist, create and set it
   } else {
 
-    // create Indiv_char struct for the new insert
-    Indiv_char temp;
-    (temp.suffix).insert(std::pair<char, unsigned int>(querry_char, update) );
-    temp.designated_char = map_letter;
+    // create Indiv_str struct for the new insert
+    Indiv_str temp;
+    (temp.suffix).insert(std::pair<char, unsigned int>(querry_str, update) );
+    temp.designated_str = map_str;
     temp.total_comparisons = update;
     temp.links = 1;
+    if (querry_str[querry_str.length() - 1] == '\n') {
+      temp.is_endcard = true;
+    }
 
     // insert the new pair into the "prefix" map & update the "set_vector"
-    prefix.insert(std::pair<char, Indiv_char>(map_letter, temp) );
-    set_vector.push_back(map_letter);
+    prefix.insert(std::pair<std::string, Indiv_str>(map_str, temp) );
+    set_vector.push_back(map_str);
   }
 
 }
@@ -70,22 +73,22 @@ void Markov_chain::set_odds(char map_letter, char querry_char, unsigned int upda
 //  percent chance * 100; if a certain char has a 26% chance of being
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
-void Markov_chain::Make_odd_series(char in) {
+void Warkov_chain::Make_odd_series(std::string in) {
   // create/ assign objs as needed
-  Indiv_char temp = prefix[in];
-  std::vector<char> return_obj;
+  Indiv_str temp = prefix[in];
+  std::vector<std::string> return_obj;
   // Clear the appearance rate map to be reset
   temp.appearance_rate.clear();
   temp.odds.clear();
   // make a map.iterator then go through the suffix map one by one
-  for (std::map<char, unsigned int>::iterator it = temp.suffix.begin();
+  for (std::map<std::string, unsigned int>::iterator it = temp.suffix.begin();
       it != temp.suffix.end(); it++) {
     // determine perecnt chance of occurance by dividing suffix's numerical occurance
     //  count by the total # occurances; then multiply by 100
     float K = it->second / temp.total_comparisons;
     int J = K * 100;
    // assign appropriate set to appearance_rate
-   temp.appearance_rate.insert(std::pair<char, int>(it->first, J));
+   temp.appearance_rate.insert(std::pair<std::string, int>(it->first, J));
    // populate the temp.odds vector with a temp vector
     while(J > 0) {
       return_obj.push_back( it->first );
@@ -96,21 +99,20 @@ void Markov_chain::Make_odd_series(char in) {
   temp.odds = return_obj;
 }
 
-
 /**/
 //  FN: begin recursive FN "build_word", ends on a whitespace
-std::string Markov_chain::word_building(char start_letter) {
-  return build_word(start_letter);
+std::string Warkov_chain::line_building(std::string start_str) {
+  return build_word(start_str);
 }
 
 /**/
 //  FN: recursive fn to start making a word letter by letter
-std::string Markov_chain::build_word(char runner) {
+std::string Warkov_chain::build_line(std::string runner) {
 std::string return_obj = "";
-Indiv_char temp = prefix[runner];
+Indiv_str temp = prefix[runner]
 
   // if the runner is a whitespace, then pass the "runner" as is
-  if ( std::isspace(runner) ) {
+  if ( temp.is_endcard ) {
     return_obj = return_obj + runner;
     // end recurssion
 
@@ -119,23 +121,24 @@ Indiv_char temp = prefix[runner];
     // return a random number between 0 and size of the vector "V" as "T"
     int T = mass_rand(temp.odds.size() );
     // using the random number, pull it's "odds" vector to pull from
-    char R = temp.odds[T]
+    std::string R = temp.odds[T]
     // Build the string "return_obj" wih the randomly chosen letter and call
     //    the function recurssively to get the next letter;
-    return_obj = R + build_word(temp.odds[T]);
+    return_obj = R + build_line(temp.odds[T]);
     // recurse
   }
   return return_obj;
 }
 /**/
 // Provide a char and return the most likely char
-char return_char(char querry_letter) {
-// if the char exists in Markov's stored data
-if (prefix.find(querry_letter) != prefix.end) {
+std::string return_str(std::string querry_str) {
+// if the char exists in Warkov's stored data
+if (prefix.find(querry_str) != prefix.end) {
   // temp variables
-  Indiv_char temp = prefix[querry_letter];
-  char current; // check moment by moment
-  char largest; // last char
+  // for length of odds, count number of same char
+  Indiv_str temp = prefix[querry_letter];
+  std::string current; // check moment by moment
+  std::string largest; // last char
   int check = 0; // char with greatest liekely hood
   // for length of odds, count number of same char
   for (std::map<char, int>::iterator it = temp.appearance_rate.begin(); it !=
@@ -146,18 +149,19 @@ if (prefix.find(querry_letter) != prefix.end) {
     }
   }
 }
+}
 return check;
 }else {
 // error; desired char not in saved data
 // unreliable error response, but it is one
-return '0';
+return "0";
 }
 }
 // public FN, to take in inputs to add to data collection
-void markov::recieve_mssg(int i_in, char c_in, char check, int flags) {
+void Warkov::recieve_mssg(int i_in, char c_in, char check, int flags) {
   switch (flags) {
     case 0: // new input, put into class accordingly
-        Indiv_char temp = prefix[check];
+        Indiv_str temp = prefix[check];
         (temp.suffix).insert(std::pair<char, int>(c_in, i_in));
         break;
     case 1: // Update required, check.suffix[c_in] != i_in

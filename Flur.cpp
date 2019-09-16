@@ -71,6 +71,6 @@ char Decode(int a) { // input as ASCII to return a character; even nessessary?
    return c;
  }
 
- void SendToMarkov(char, int); // send a variable to Markov
+void SendToMarkov(char, int); // send a variable to Markov
  void MessageMarkov(int); void MessageMarkov(int, char); // systematically send messages
                      //to Markov; ie: inform Markov the start of a new line or new char
