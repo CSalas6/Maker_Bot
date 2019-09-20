@@ -74,6 +74,8 @@ void Warkov_chain::set_odds(char map_str, char querry_str, unsigned int update) 
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
 void Warkov_chain::Make_odd_series(std::string in) {
+// only run FN if in the prefix[]
+if (prefix[in].find() != prefix.end() ) {
   // create/ assign objs as needed
   Indiv_str temp = prefix[in];
   std::vector<std::string> return_obj;
@@ -97,6 +99,7 @@ void Warkov_chain::Make_odd_series(std::string in) {
   }
   // set the temp vector to the temp.odds one
   temp.odds = return_obj;
+  }
 }
 
 /**/
@@ -130,7 +133,7 @@ Indiv_str temp = prefix[runner]
   return return_obj;
 }
 /**/
-// Provide a char and return the most likely char
+// Provide a string and return the most likely string
 std::string return_str(std::string querry_str) {
 // if the char exists in Warkov's stored data
 if (prefix.find(querry_str) != prefix.end) {
@@ -158,27 +161,48 @@ return "0";
 }
 }
 // public FN, to take in inputs to add to data collection
-void Warkov::recieve_mssg(int i_in, char c_in, char check, int flags) {
+void Warkov::recieve_mssg(int i_in, std::string s_in, str::string check, int flags) {
   switch (flags) {
-    case 0: // new input, put into class accordingly
+    case 0: // new input, put into class accordingly; only ever at starting up
+      // check is not in the prefix map
+        if(prefix.find(map_str) == prefix.end() ) {
+            Indiv_str temp;
+            temp.designated_str = check;
+            (temp.suffix).insert(std::pair<std::string, unsigned int>(c_in, i_in));
+            prefix.insert(std::pair<std::string, Indiv_str>(check, s_in) );
+            // Check is already in the prfix map
+          } else {
         Indiv_str temp = prefix[check];
-        (temp.suffix).insert(std::pair<char, int>(c_in, i_in));
+        (temp.suffix).insert(std::pair<std::string, unsigned int>(c_in, i_in));
+        }
         break;
-    case 1: // Update required, check.suffix[c_in] != i_in
-        set_odds(check, c_in, i_in);
-        Make_odd_series(check)
+    case 1: // Update required, check.suffix[c_in] != i_in or add to map after
+            // staring up
+        set_odds(check, s_in, i_in);
         break;
-    case 2: // temp
+        case 2: // Update required, check.suffix[c_in] != i_in or add to map after
+                // staring up AND remake the odd_series
+            set_odds(check, s_in, i_in);
+            recieve_mssg(0, "", check, 3);
+            break;
+                case 3:
+        Make_odd_series(check);
         break;
     default:
         break;
   }
 }
-
+// other recieve_mssg function to insted take in a prefix[] object
+void recieve_mssg(std::string s_in, Indiv_str IS_in) {
+  // if prefix does not exist
+  if (prefix[s_in].find() == prefix.end() ) {
+    prefix.insert(std::pair<std::string, Indiv_str>(s_in, IS_in) );
+  }
+}
 // public FN, recieves a char that is used to pull the corresponding suffic
 // list from
-std::map<char, unsigned int> write_request(char c_in) {
-  return prefix[c_in].suffix;
+std::map<char, unsigned int> write_request(std::string s_in) {
+  return prefix[s_in].suffix;
 }
 
 
