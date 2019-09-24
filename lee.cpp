@@ -38,7 +38,35 @@ private:
   }
   // FN: Read in from the file and generate an occurance rate in map form
   //  for use by Warkov, word by word comparisons
-  void Lee::populate_w_pre();
+  void Lee::populate_w_pre() {
+    std::string pre = "", suf = "";
+    for (char LetterA = file_access.get(); file_access.good(); suf = file_access.get()) {
+      suf = suf + LetterA;
+      if (std::isspace(LetterA) ) {
+        if (pre != "") {
+          w_fill(pre, suf);
+        }
+        pre = suf;
+        suf = "";
+      }
+    } // end of For loop
+  }
+
+  void Lee::w_fill(std::string pre, std::string suf) {
+    if (warkov_prefixes[pre].find() != warkov_prefixes.end() ){
+      Indiv_str temp = warkov_prefixes[pre];
+      if (temp.suffix[suf].find() != temp.suffix.end() ) {
+        temp.suffix[suf] += 1;
+      } else {
+        temp.suffix.insert(std::pair<std::string, unsigned int>(suf, 1) );
+      }
+    } else {
+      Indiv_str temp;
+      temp.designated_str = pre;
+      temp.suffix.insert(std::pair<std::string, unsigned int>(suf, 1));
+      markov_prefixes.insert(std::pair<char, Indiv_str>(pre, temp));
+    }
+  }
   // a private access to set the file_access variable
   void Lee::set_file_access(std::string in) {
     if ( file_access.open(in, std::ifstream::in) )
@@ -50,12 +78,28 @@ private:
   void Lee::send_to_warkov();
 
   // constructors
-  Lee::Lee(); Lee::Lee(Markov_chain * a, Warkov_chain * b);
-  Lee::Lee(std::string a);
-  Lee::Lee(std::string a, Markov_chain * a, Warkov_chain * b);
+  Lee::Lee() {}
+  Lee::Lee(Markov_chain * a, Warkov_chain * b) {
+    recieve_markov_obj(a);
+    recieve_warkov_obj(b);
+  }
+  Lee::Lee(std::string a) {
+    recieve_file(a);
+  }
+  Lee::Lee(std::string a, Markov_chain * b, Warkov_chain * c) {
+    recieve_file(a);
+    recieve_markov_obj(b);
+    recieve_warkov_obj(c);
+  }
   // FN: public access to set the file_access variable
   void Lee::recieve_file(std::string in) {set_file_access(in);}
   // FN: set the object of Lee::Markov to the input
-  void Lee::recieve_markov_obj(Markov_chain * in);
+  void Lee::recieve_markov_obj(Markov_chain * in) {
+    &Markov = in;
+    &markov_prefixes = * (Markov.prefix);
+  }
   // FN: set the object of Lee::Warkov to the input
-  void Lee::recieve_warkov_obj(Warkov_chain * in);
+  void Lee::recieve_warkov_obj(Warkov_chain * in) {
+    &Warkov = in;
+    &warkov_prefixes = * (Warkov.prefix);
+  }
