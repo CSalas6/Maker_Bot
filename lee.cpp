@@ -21,6 +21,8 @@ private:
       }
     }
   }
+  // Fn poulate_m_pre() helper function. Take inputs of "pre" and "suf" to
+  // fill in the Markov prefix map accordingly
   void Lee::m_fill(char pre, char suf) {
     if (markov_prefixes[pre].find() != markov_prefixes.end() ){
       Indiv_char temp = markov_prefixes[pre];
@@ -51,7 +53,8 @@ private:
       }
     } // end of For loop
   }
-
+  // Fn poulate_w_pre() helper function. Take inputs of "pre" and "suf" to
+  // fill in the Warkov prefix map accordingly
   void Lee::w_fill(std::string pre, std::string suf) {
     if (warkov_prefixes[pre].find() != warkov_prefixes.end() ){
       Indiv_str temp = warkov_prefixes[pre];
@@ -92,7 +95,9 @@ private:
     recieve_warkov_obj(c);
   }
   // FN: public access to set the file_access variable
-  void Lee::recieve_file(std::string in) {set_file_access(in);}
+  void Lee::recieve_file(std::string in) {
+    set_file_access(in);
+  }
   // FN: set the object of Lee::Markov to the input
   void Lee::recieve_markov_obj(Markov_chain * in) {
     &Markov = in;

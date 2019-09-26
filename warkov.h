@@ -64,7 +64,7 @@ class Warkov_chain {
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
 void Make_odd_series(std::string in);
-
+void in_indiv_str_fix(Indiv_str IS_in);
   public:
     // FN:
     Warkov_chain();

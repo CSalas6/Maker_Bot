@@ -62,7 +62,7 @@ class Markov_chain {
 //  the suffix then, in the vector there will be 26 copies of that same
 //  letter
 void Make_odd_series(char in);
-
+void in_indiv_char_fix(Indiv_char IC_in);
   public:
     // FN:
     Markov_chain();
@@ -79,6 +79,7 @@ void Make_odd_series(char in);
 // see Flur file
     // FN: recieve message from anther function
 void recieve_mssg(int i_in, char c_in, int flags);
+void recieve_mssg(char c_in, Indiv_char IC_in);
 void recieve_mssg(std::map<char, Indiv_char> in, int flags);
 // FN: recieve request for map of data
 std::map<char, unsigned int> write_request(char c_in)

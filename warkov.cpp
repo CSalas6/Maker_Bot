@@ -28,7 +28,7 @@ unsigned int Warkov_chain::get_odds(std::string map_str, std::string querry_str)
 
 /**/
 
-void Warkov_chain::set_odds(char map_str, char querry_str, unsigned int update) {
+void Warkov_chain::set_odds(std::string map_str, std::string querry_str, unsigned int update) {
   // If the map prefix exists
   if(prefix.find(map_str) != prefix.end() ) {
     Indiv_str temp = prefix[map_str];
@@ -193,11 +193,24 @@ void Warkov::recieve_mssg(int i_in, std::string s_in, str::string check, int fla
   }
 }
 // other recieve_mssg function to insted take in a prefix[] object
-void recieve_mssg(std::string s_in, Indiv_str IS_in) {
-  // if prefix does not exist
+void Warkov::recieve_mssg(std::string s_in, Indiv_str IS_in) {
+  // if prefix does not exist, fill it with the Indiv_str
   if (prefix[s_in].find() == prefix.end() ) {
     prefix.insert(std::pair<std::string, Indiv_str>(s_in, IS_in) );
+    Make_odd_series(s_in);
+  } else {
+    // If the prefix does exist then add all the new values to the prefix map
+    in_indiv_str_fix(IS_in);
+    Make_odd_series(s_in);
   }
+}
+// recieve_mssg(string, Indiv_str) Helper function. Progressively move through
+// the Indiv_str to update each Indiv_str.suffix set
+void Warkov::in_indiv_str_fix(Indiv_str IS_in) {
+  for (std::map<std::string, unsigned int>::iterator it = IS_in.suffix.begin();
+      it != IS_in.suffix.end(); it++) {
+        set_odds(IS_in.designated_str, it.first(), it.second());
+      }
 }
 // public FN, recieves a char that is used to pull the corresponding suffic
 // list from

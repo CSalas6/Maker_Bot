@@ -12,9 +12,11 @@ private:
   // FN: Read in from the file and generate an occurance rate in map form
   //  for use by Markov, letter comparisons to one-another
   void populate_m_pre();
+  void w_fill(char pre, char suf);
   // FN: Read in from the file and generate an occurance rate in map form
   //  for use by Warkov, word by word comparisons
   void populate_w_pre();
+  void w_fill(std::string pre, std::string suf);
   // a private access to set the file_access variable
   void set_file_access(std::string in);
 

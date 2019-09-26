@@ -170,7 +170,25 @@ void markov::recieve_mssg(int i_in, char c_in, char check, int flags) {
         break;
   }
 }
-
+void Markov::recieve_mssg(char c_in, Indiv_char IC_in) {
+  // if prefix does not exist, fill it with the Indiv_str
+  if (prefix[c_in].find() == prefix.end() ) {
+    prefix.insert(std::pair<char, Indiv_char>(c_in, IC_in) );
+    Make_odd_series(c_in);
+  } else {
+    // If the prefix does exist then add all the new values to the prefix map
+    in_indiv_char_fix(IC_in);
+    Make_odd_series(c_in);
+  }
+}
+// recieve_mssg(string, Indiv_str) Helper function. Progressively move through
+// the Indiv_str to update each Indiv_str.suffix set
+void Markov::in_indiv_char_fix(Indiv_char IC_in) {
+  for (std::map<char, unsigned int>::iterator it = IC_in.suffix.begin();
+      it != IC_in.suffix.end(); it++) {
+        set_odds(IC_in.designated_str, it.first(), it.second());
+      }
+}
 // public FN, recieves a char that is used to pull the corresponding suffic
 // list from
 std::map<char, unsigned int> write_request(char c_in) {
