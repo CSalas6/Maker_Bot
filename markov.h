@@ -1,3 +1,4 @@
+
 #include<cstdlib>
 #include<cstdio>
 #include<ctime>
@@ -6,6 +7,9 @@
 #include<map>
 #include<vector>
 #include<string>
+
+#ifndef MARKOV_H
+#define MARKOV_H
 
 /*
 // Base Structs to hold individual Char comparison
@@ -86,3 +90,5 @@ std::map<char, unsigned int> write_request(char c_in)
 
 
 };
+
+#endif

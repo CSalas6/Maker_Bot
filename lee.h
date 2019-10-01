@@ -1,3 +1,20 @@
+
+#include<cstdlib>
+#include<cstdio>
+#include<ctime>
+#include<iostream>
+#include<cctype>
+#include<map>
+#include<vector>
+#include<string>
+#include"markov.h"
+#include"warkov.h"
+#include"Flur.h"
+
+
+#ifndef LEE_H
+#define LEE_H
+
 // Lee will work on the decoding of other code files to create a database for
 // use by Markov and Warkov respectively.
 
@@ -36,3 +53,5 @@ public:
   // FN: set the object of Lee::Warkov to the input
   void recieve_warkov_obj(Warkov_chain * in);
 };
+
+#endif

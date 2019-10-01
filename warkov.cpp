@@ -107,7 +107,16 @@ if (prefix[in].find() != prefix.end() ) {
 std::string Warkov_chain::line_building(std::string start_str) {
   return build_word(start_str);
 }
-
+int Warkov_chain::prefix_size() {
+  return prefix.size();
+}
+std::string Warkov_chain::R_line_building(int in) {
+  if (prefix.size() > in){
+  return build_word(prefix[in]);
+} else {
+  return "Build failed\n;";
+}
+}
 /**/
 //  FN: recursive fn to start making a word letter by letter
 std::string Warkov_chain::build_line(std::string runner) {

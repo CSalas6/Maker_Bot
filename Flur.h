@@ -1,3 +1,18 @@
+
+#include<cstdlib>
+#include<cstdio>
+#include<ctime>
+#include<iostream>
+#include<cctype>
+#include<map>
+#include<vector>
+#include<string>
+#include"markov.h"
+#include"warkov.h"
+#include"lee.h"
+
+#ifndef FLUR_H
+#define FLUR_H
 // Flur will be tasked with explicitly reading from the save file and
 // sending it off to Markov's save file
 #include<string>
@@ -39,3 +54,5 @@ class Flur {
  void MessageMarkov(int); void MessageMarkov(int, char); // systematically send messages
                      //to Markov; ie: inform Markov the start of a new line or new char
 };
+
+#endif

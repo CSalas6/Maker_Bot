@@ -1,3 +1,4 @@
+
 #include<cstdlib>
 #include<cstdio>
 #include<ctime>
@@ -6,6 +7,11 @@
 #include<map>
 #include<vector>
 #include<string>
+#include"markov.h"
+
+#ifndef WARKOV_H
+#define WARKOV_H
+
 
 /*
 // Base Structs to hold individual Char comparison
@@ -72,6 +78,8 @@ void in_indiv_str_fix(Indiv_str IS_in);
     // FN: make a single word; end with a whitespace
     std::string line_building(std::string start_str);
     // FN: provide a char, return the most likely char
+    int prefix_size();
+    std::string R_line_building(int in);
     std::string return_word(std::string querry_letter);
     // FN: same as "return_char" but is random
 /***************************/
@@ -87,3 +95,5 @@ std::map<std::string, unsigned int> write_request(std::string in)
 
 
 };
+
+#endif
